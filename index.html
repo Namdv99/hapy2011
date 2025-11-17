@@ -2,53 +2,63 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Full Screen Video</title>
+<title>Video Player</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-    html, body {
+    body {
         margin: 0;
-        padding: 0;
-        height: 100%;
-        background: black;
+        background: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .video-container {
+        width: 100%;
+        max-width: 800px; /* giống YouTube trên mobile */
+        position: relative;
     }
 
     video {
-        width: 100vw;
-        height: 100vh;
-        object-fit: cover;
+        width: 100%;
+        height: auto;   /* giữ nguyên tỉ lệ video */
+        display: block;
+        background: black;
     }
 
-    /* Nút play/pause */
     #playBtn {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        padding: 20px 32px;
-        font-size: 22px;
+        padding: 14px 24px;
+        background: rgba(255,255,255,0.85);
         border: none;
-        border-radius: 10px;
-        background: rgba(255,255,255,0.8);
+        font-size: 20px;
+        border-radius: 8px;
         cursor: pointer;
-        z-index: 10;
+        z-index: 20;
     }
 </style>
 </head>
+
 <body>
 
-<video id="vid" autoplay playsinline>
-    <source src="video.mp4" type="video/mp4">
-    Your browser does not support video.
-</video>
+<div class="video-container">
+    <video id="vid" autoplay playsinline>
+        <source src="video.mp4" type="video/mp4">
+    </video>
 
-<button id="playBtn">Pause</button>
+    <button id="playBtn">Pause</button>
+</div>
 
 <script>
     const video = document.getElementById("vid");
     const btn = document.getElementById("playBtn");
 
-    video.muted = false; // bật âm mặc định
+    video.muted = false;
     video.play();
 
     btn.onclick = () => {
@@ -61,25 +71,20 @@
         }
     };
 
-    // Ẩn nút khi video đang chạy sau 3s
-    let hideTimer;
-    const hideButton = () => {
-        btn.style.opacity = 0;
-    };
+    // Ẩn nút 3s sau khi play
+    let timeout;
+    const hideBtn = () => btn.style.opacity = 0;
 
-    const showButton = () => {
+    const showBtn = () => {
         btn.style.opacity = 1;
-        clearTimeout(hideTimer);
-        hideTimer = setTimeout(hideButton, 3000);
+        clearTimeout(timeout);
+        timeout = setTimeout(hideBtn, 2000);
     };
 
-    // Khi user chạm/move sẽ hiện nút
-    document.addEventListener("mousemove", showButton);
-    document.addEventListener("touchstart", showButton);
+    document.addEventListener("mousemove", showBtn);
+    document.addEventListener("touchstart", showBtn);
 
-    // Tự ẩn sau khi load
-    hideTimer = setTimeout(hideButton, 3000);
+    timeout = setTimeout(hideBtn, 2000);
 </script>
-
 </body>
 </html>

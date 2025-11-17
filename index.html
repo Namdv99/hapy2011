@@ -17,13 +17,13 @@
 
     .video-container {
         width: 100%;
-        max-width: 800px; /* giống YouTube trên mobile */
+        max-width: 800px;
         position: relative;
     }
 
     video {
         width: 100%;
-        height: auto;   /* giữ nguyên tỉ lệ video */
+        height: auto;
         display: block;
         background: black;
     }
@@ -33,13 +33,21 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        padding: 14px 24px;
-        background: rgba(255,255,255,0.85);
+        background: rgba(255,255,255,0.8);
         border: none;
-        font-size: 20px;
-        border-radius: 8px;
+        padding: 18px;
+        border-radius: 50%;
         cursor: pointer;
         z-index: 20;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.3s;
+    }
+
+    #playBtn svg {
+        width: 32px;
+        height: 32px;
     }
 </style>
 </head>
@@ -51,12 +59,25 @@
         <source src="video.mp4" type="video/mp4">
     </video>
 
-    <button id="playBtn">Pause</button>
+    <button id="playBtn">
+        <!-- Pause icon mặc định -->
+        <svg id="pauseIcon" viewBox="0 0 64 64">
+            <rect x="14" y="12" width="12" height="40"></rect>
+            <rect x="38" y="12" width="12" height="40"></rect>
+        </svg>
+
+        <!-- Play icon -->
+        <svg id="playIcon" viewBox="0 0 64 64" style="display:none;">
+            <polygon points="16,12 52,32 16,52"></polygon>
+        </svg>
+    </button>
 </div>
 
 <script>
     const video = document.getElementById("vid");
     const btn = document.getElementById("playBtn");
+    const playIcon = document.getElementById("playIcon");
+    const pauseIcon = document.getElementById("pauseIcon");
 
     video.muted = false;
     video.play();
@@ -64,14 +85,16 @@
     btn.onclick = () => {
         if (video.paused) {
             video.play();
-            btn.textContent = "Pause";
+            playIcon.style.display = "none";
+            pauseIcon.style.display = "block";
         } else {
             video.pause();
-            btn.textContent = "Play";
+            playIcon.style.display = "block";
+            pauseIcon.style.display = "none";
         }
     };
 
-    // Ẩn nút 3s sau khi play
+    // Tự ẩn nút sau vài giây
     let timeout;
     const hideBtn = () => btn.style.opacity = 0;
 
@@ -86,5 +109,6 @@
 
     timeout = setTimeout(hideBtn, 2000);
 </script>
+
 </body>
 </html>

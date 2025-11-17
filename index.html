@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Full Screen Video</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: black;
+    }
+
+    video {
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+    }
+
+    /* Nút play/pause */
+    #playBtn {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px 32px;
+        font-size: 22px;
+        border: none;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.8);
+        cursor: pointer;
+        z-index: 10;
+    }
+</style>
+</head>
+<body>
+
+<video id="vid" autoplay playsinline>
+    <source src="video.mp4" type="video/mp4">
+    Your browser does not support video.
+</video>
+
+<button id="playBtn">Pause</button>
+
+<script>
+    const video = document.getElementById("vid");
+    const btn = document.getElementById("playBtn");
+
+    video.muted = false; // bật âm mặc định
+    video.play();
+
+    btn.onclick = () => {
+        if (video.paused) {
+            video.play();
+            btn.textContent = "Pause";
+        } else {
+            video.pause();
+            btn.textContent = "Play";
+        }
+    };
+
+    // Ẩn nút khi video đang chạy sau 3s
+    let hideTimer;
+    const hideButton = () => {
+        btn.style.opacity = 0;
+    };
+
+    const showButton = () => {
+        btn.style.opacity = 1;
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(hideButton, 3000);
+    };
+
+    // Khi user chạm/move sẽ hiện nút
+    document.addEventListener("mousemove", showButton);
+    document.addEventListener("touchstart", showButton);
+
+    // Tự ẩn sau khi load
+    hideTimer = setTimeout(hideButton, 3000);
+</script>
+
+</body>
+</html>
